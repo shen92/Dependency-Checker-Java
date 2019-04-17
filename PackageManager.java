@@ -114,33 +114,34 @@ public class PackageManager {
 
     // 3.graph DFS
     // 4.Rgraph DFS
-    System.out.println("DFS: " + pkg);
+
     if (!graph.getAllVertices().contains(pkg)) {
       System.out.println(pkg + " not exist");
       throw new PackageNotFoundException();
     }
     Set<String> unvisited = graph.getAllVertices();
     List<String> DFS = new ArrayList<>();
-    // List<String> BFS = new ArrayList<>();
-    // Queue<String> q = new LinkedList<>();
-    // unvisited.remove(pkg);// mark pkg as visited
-    // q.offer(pkg);// enqueue pkg
-    // while (!q.isEmpty()) {
-    // String curr = q.poll();// dequeue
-    // BFS.add(curr);
-    // for (String s : graph.getAdjacentVerticesOf(curr)) {// for each successor of curr
-    // if (unvisited.contains(s)) {// if unvisited
-    // unvisited.remove(s);
-    // q.offer(s);
-    // }
-    // }
-    // }
+    List<String> BFS = new ArrayList<>();
+    Queue<String> q = new LinkedList<>();
+    System.out.println("BFS: " + pkg);
+    unvisited.remove(pkg);// mark pkg as visited
+    q.offer(pkg);// enqueue pkg
+    while (!q.isEmpty()) {
+      String curr = q.poll();// dequeue
+      BFS.add(curr);
+      for (String s : graph.getAdjacentVerticesOf(curr)) {// for each successor of curr
+        if (unvisited.contains(s)) {// if unvisited
+          unvisited.remove(s);
+          q.offer(s);
+        }
+      }
+    }
     // BFS.remove(0);
-    // return BFS;
+    return BFS;
 
-    DFS = DFSHelper(pkg, DFS, unvisited);
-    DFS.remove(0);
-    return DFS;
+    // DFS = DFSHelper(pkg, DFS, unvisited);
+    // //DFS.remove(0);
+    // return DFS;
   }
 
   private List<String> DFSHelper(String v, List<String> DFS, Set<String> unvisited)
@@ -148,7 +149,6 @@ public class PackageManager {
     System.out.println("DFS: " + v);
     unvisited.remove(v);// mark v as visited
     DFS.add(v);
-    System.out.println("DFS Sort: " + DFS);
     for (String s : rGraph.getAdjacentVerticesOf(v)) {// for each successors of v
       if (s.equals(v)) {
         throw new CycleException();
@@ -261,12 +261,12 @@ public class PackageManager {
   }
 
   public void _pinf(Package p) {
-    System.out.println(p.getName());
-    System.out.print("Dependencies: ");
-    for (int i = 0; i < p.getDependencies().length; i++) {
-      System.out.print(p.getDependencies()[i] + " ");
-    }
-    System.out.println();
+    // System.out.println(p.getName());
+    // System.out.print("Dependencies: ");
+    // for (int i = 0; i < p.getDependencies().length; i++) {
+    // System.out.print(p.getDependencies()[i] + " ");
+    // }
+    // System.out.println();
   }
 
   private boolean hasPredecessor(String vertex) {

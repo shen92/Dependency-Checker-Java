@@ -18,6 +18,7 @@ public class test {
     test.constructGraph("valid.json");
     System.out.println("End constructGraph");
     System.out.println("D: " + test.getInstallationOrder("D"));
+    System.out.println(test.getInstallationOrderForAllPackages());
   }
 
   public static void gTest() {
