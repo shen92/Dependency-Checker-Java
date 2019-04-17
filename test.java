@@ -15,9 +15,9 @@ public class test {
   public static void mTest() throws FileNotFoundException, IOException, ParseException,
       CycleException, PackageNotFoundException {
     PackageManager test = new PackageManager();
-    test.constructGraph("shared_dependencies.json");
+    test.constructGraph("valid.json");
     System.out.println("End constructGraph");
-    System.out.println("A: " + test.getInstallationOrder("A"));
+    System.out.println("D: " + test.getInstallationOrder("D"));
   }
 
   public static void gTest() {
