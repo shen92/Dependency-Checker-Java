@@ -79,8 +79,8 @@ public class PackageManager {
 
       for (int j = 0; j < packageDependencies.length; j++) {
         // add edges point to the vertex
-        graph.addEdge(pack.getName(), pack.getDependencies()[j]);
-        rGraph.addEdge(pack.getDependencies()[j], pack.getName());
+        graph.addEdge(pack.getDependencies()[j], pack.getName());
+        rGraph.addEdge(pack.getName(), pack.getDependencies()[j]);
       }
     }
   }
