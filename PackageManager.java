@@ -119,12 +119,10 @@ public class PackageManager {
       System.out.println(pkg + " not exist");
       throw new PackageNotFoundException();
     }
-    int num = graph.getAllVertices().size();
     Stack<String> st = new Stack<>();
     Set<String> unvisited = graph.getAllVertices();
     List<String> installOrder = new ArrayList<>();
     unvisited.remove(pkg);
-    // installOrder.add(pkg);
     st.push(pkg);
     while (!st.empty()) {
       String curr = st.peek();
@@ -136,9 +134,7 @@ public class PackageManager {
       }
       if (allVisited) {
         st.pop();
-        // System.out.println(curr + " " + num);
         installOrder.add(0, curr);
-        num--;
       } else {
         for (String s : rGraph.getAdjacentVerticesOf(curr)) {
           if (unvisited.contains(s)) {
@@ -151,11 +147,8 @@ public class PackageManager {
       }
     }
     Collections.reverse(installOrder);
-    // installOrder.remove(0);
     return installOrder;
   }
-
-
 
   /**
    * Given two packages - one to be installed and the other installed, return a List of the packages
@@ -188,9 +181,42 @@ public class PackageManager {
    * 
    * @return List<String>, order in which all the packages have to be installed
    * @throws CycleException if you encounter a cycle in the graph
+   * @throws PackageNotFoundException
    */
-  public List<String> getInstallationOrderForAllPackages() throws CycleException {
-    throw new CycleException();
+  public List<String> getInstallationOrderForAllPackages()
+      throws CycleException, PackageNotFoundException {
+    Stack<String> st = new Stack<>();
+    Set<String> unvisited = graph.getAllVertices();
+    List<String> topoOrder = new ArrayList<>();
+    for (String v : rGraph.getAllVertices()) {
+      if (!hasPredecessor(v)) {
+        unvisited.remove(v);
+        st.push(v);
+      }
+    }
+    while (!st.empty()) {
+      String curr = st.peek();
+      boolean allVisited = true;
+      for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (unvisited.contains(s)) {
+          allVisited = false;
+        }
+      }
+      if (allVisited) {
+        st.pop();
+        topoOrder.add(0, curr);
+      } else {
+        for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+          if (unvisited.contains(s)) {
+            unvisited.remove(s);
+            st.push(s);
+            break;
+          }
+        }
+      }
+    }
+    Collections.reverse(topoOrder);
+    return topoOrder;
   }
 
   /**
@@ -225,26 +251,30 @@ public class PackageManager {
   }
 
   private boolean hasPredecessor(String vertex) {
-    return rGraph.getAdjacentVerticesOf(vertex).size() > 0;
+    return graph.getAdjacentVerticesOf(vertex).size() > 0;
   }
 
   private List<String> predecessorsOf(String vertex) {
-    return rGraph.getAdjacentVerticesOf(vertex);
+    return graph.getAdjacentVerticesOf(vertex);
   }
 
   private boolean hasSuccessor(String vertex) {
     // System.out.println(graph.getAdjacentVerticesOf(vertex));
-    return graph.getAdjacentVerticesOf(vertex).size() > 0;
+    return rGraph.getAdjacentVerticesOf(vertex).size() > 0;
   }
 
   private List<String> successorsOf(String vertex) {
-    return graph.getAdjacentVerticesOf(vertex);
+    return rGraph.getAdjacentVerticesOf(vertex);
   }
 
   private boolean containsCycle() {
-
     return false;
   }
+
+  public List<String> getTopologicalOrder() {
+    return null;
+  }
+
 
   public Graph getGraph() {
     return this.graph;

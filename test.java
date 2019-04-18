@@ -19,7 +19,7 @@ public class test {
     System.out.println("End constructGraph");
     for (String s : test.getGraph().getAllVertices()) {
       System.out.println();
-      System.out.println(s + ": " + test.getInstallationOrder(s));
+      System.out.println(s + ": " + test.getInstallationOrderForAllPackages());
     }
     System.out.println("Over");
     // System.out.println(test.getInstallationOrderForAllPackages());
