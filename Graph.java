@@ -231,16 +231,16 @@ public class Graph implements GraphADT {
   }
 
   private void debug() {
-    System.out.println("========graphView========");
-    System.out.println("Size: " + this.size);
-    System.out.println("Order: " + this.order);
-    for (int i = 0; i < adjList.size(); i++) {
-      System.out.print(adjList.get(i).get(0) + "->");
-      for (int j = 1; j < adjList.get(i).size(); j++) {
-        System.out.print(adjList.get(i).get(j) + ", ");
-      }
-      System.out.println();
-    }
-    System.out.println();
+    // System.out.println("========graphView========");
+    // System.out.println("Size: " + this.size);
+    // System.out.println("Order: " + this.order);
+    // for (int i = 0; i < adjList.size(); i++) {
+    // System.out.print(adjList.get(i).get(0) + "->");
+    // for (int j = 1; j < adjList.get(i).size(); j++) {
+    // System.out.print(adjList.get(i).get(j) + ", ");
+    // }
+    // System.out.println();
+    // }
+    // System.out.println();
   }
 }

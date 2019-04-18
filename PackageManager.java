@@ -32,12 +32,15 @@ public class PackageManager {
   private Graph graph;
   private Graph rGraph;
 
+  private boolean isDAG;
+
   /*
    * Package Manager default no-argument constructor.
    */
   public PackageManager() {
     this.graph = new Graph();
     this.rGraph = new Graph();
+    this.isDAG = true;
   }
 
   /**
@@ -115,6 +118,10 @@ public class PackageManager {
    */
   public List<String> getInstallationOrder(String pkg)
       throws CycleException, PackageNotFoundException {
+    checkCycle();
+    if (!isDAG) {
+      throw new CycleException();
+    }
     if (!graph.getAllVertices().contains(pkg)) {
       System.out.println(pkg + " not exist");
       throw new PackageNotFoundException();
@@ -169,7 +176,47 @@ public class PackageManager {
    */
   public List<String> toInstall(String newPkg, String installedPkg)
       throws CycleException, PackageNotFoundException {
-    return null;
+    checkCycle();
+    if (!isDAG) {
+      throw new CycleException();
+    }
+    if (!graph.getAllVertices().contains(newPkg)) {
+      System.out.println(newPkg + " not exist");
+      throw new PackageNotFoundException();
+    }
+    if (!graph.getAllVertices().contains(installedPkg)) {
+      System.out.println(installedPkg + " not exist");
+      throw new PackageNotFoundException();
+    }
+    Stack<String> st = new Stack<>();
+    Set<String> unvisited = graph.getAllVertices();
+    List<String> installOrder = new ArrayList<>();
+    unvisited.remove(newPkg);
+    unvisited.remove(installedPkg);
+    st.push(newPkg);
+    while (!st.empty()) {
+      String curr = st.peek();
+      boolean allVisited = true;
+      for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (unvisited.contains(s)) {
+          allVisited = false;
+        }
+      }
+      if (allVisited) {
+        st.pop();
+        installOrder.add(0, curr);
+      } else {
+        for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+          if (unvisited.contains(s)) {
+            unvisited.remove(s);
+            st.push(s);
+            break;
+          }
+        }
+      }
+    }
+    Collections.reverse(installOrder);
+    return installOrder;
   }
 
   /**
@@ -185,6 +232,10 @@ public class PackageManager {
    */
   public List<String> getInstallationOrderForAllPackages()
       throws CycleException, PackageNotFoundException {
+    checkCycle();
+    if (!isDAG) {
+      throw new CycleException();
+    }
     Stack<String> st = new Stack<>();
     Set<String> unvisited = graph.getAllVertices();
     List<String> topoOrder = new ArrayList<>();
@@ -231,23 +282,25 @@ public class PackageManager {
    * 
    * @return String, name of the package with most dependencies.
    * @throws CycleException if you encounter a cycle in the graph
+   * @throws PackageNotFoundException
    */
-  public String getPackageWithMaxDependencies() throws CycleException {
-
-    return "";
+  public String getPackageWithMaxDependencies() throws CycleException, PackageNotFoundException {
+    ArrayList<ArrayList<String>> allInstallOrders = new ArrayList<>();
+    for (String u : rGraph.getAllVertices()) {
+      allInstallOrders.add((ArrayList<String>) getInstallationOrder(u));
+    }
+    int num = allInstallOrders.get(0).size();
+    String max = allInstallOrders.get(0).get(allInstallOrders.get(0).size() - 1);
+    for (int i = 0; i < allInstallOrders.size(); i++) {
+      if (allInstallOrders.get(i).size() > num) {
+        max = allInstallOrders.get(i).get(allInstallOrders.get(i).size() - 1);
+      }
+    }
+    return max;
   }
 
   public static void main(String[] args) {
     System.out.println("PackageManager.main()");
-  }
-
-  public void _pinf(Package p) {
-    // System.out.println(p.getName());
-    // System.out.print("Dependencies: ");
-    // for (int i = 0; i < p.getDependencies().length; i++) {
-    // System.out.print(p.getDependencies()[i] + " ");
-    // }
-    // System.out.println();
   }
 
   private boolean hasPredecessor(String vertex) {
@@ -267,14 +320,18 @@ public class PackageManager {
     return rGraph.getAdjacentVerticesOf(vertex);
   }
 
-  private boolean containsCycle() {
-    return false;
+  private void checkCycle() {
+    System.out.println("check");
+    Set<String> unvisited = rGraph.getAllVertices();
+    Set<String> visited = new HashSet<>();
+    for (String u : rGraph.getAllVertices()) {
+      DFS(u, unvisited, visited);
+    }
   }
 
-  public List<String> getTopologicalOrder() {
-    return null;
-  }
+  private void DFS(String v, Set<String> unvisited, Set<String> visited) {
 
+  }
 
   public Graph getGraph() {
     return this.graph;

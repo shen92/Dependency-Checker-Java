@@ -15,11 +15,10 @@ public class test {
   public static void mTest() throws FileNotFoundException, IOException, ParseException,
       CycleException, PackageNotFoundException {
     PackageManager test = new PackageManager();
-    test.constructGraph("valid.json");
+    test.constructGraph("cyclic.json");
     System.out.println("End constructGraph");
-    for (String s : test.getGraph().getAllVertices()) {
-      System.out.println();
-      System.out.println(s + ": " + test.getInstallationOrderForAllPackages());
+    for (String u : test.getGraph().getAllVertices()) {
+      System.out.println(u + ": " + test.getInstallationOrder(u));
     }
     System.out.println("Over");
     // System.out.println(test.getInstallationOrderForAllPackages());
