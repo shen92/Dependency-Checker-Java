@@ -17,8 +17,12 @@ public class test {
     PackageManager test = new PackageManager();
     test.constructGraph("valid.json");
     System.out.println("End constructGraph");
-    System.out.println("D: " + test.getInstallationOrder("D"));
-    System.out.println(test.getInstallationOrderForAllPackages());
+    for (String s : test.getGraph().getAllVertices()) {
+      System.out.println();
+      System.out.println(s + ": " + test.getInstallationOrder(s));
+    }
+    System.out.println("Over");
+    // System.out.println(test.getInstallationOrderForAllPackages());
   }
 
   public static void gTest() {

@@ -52,6 +52,7 @@ public class PackageManager {
       throws FileNotFoundException, IOException, ParseException {
     Object obj = new JSONParser().parse(new FileReader(jsonFilepath));
     JSONObject jo = (JSONObject) obj; // parse the file to a JSONOBject
+    // System.out.println(jo);
 
     // convert "package" array in json to JSONArray in java
     JSONArray packages = (JSONArray) jo.get("packages");
@@ -75,11 +76,14 @@ public class PackageManager {
 
       // add vertex to the graph
       graph.addVertex(pack.getName());
+      // add vertex to the rGraph
       rGraph.addVertex(pack.getName());
 
       for (int j = 0; j < packageDependencies.length; j++) {
         // add edges point to the vertex
+        System.out.println("graph:");
         graph.addEdge(pack.getDependencies()[j], pack.getName());
+        System.out.println("rGraph:");
         rGraph.addEdge(pack.getName(), pack.getDependencies()[j]);
       }
     }
@@ -111,55 +115,46 @@ public class PackageManager {
    */
   public List<String> getInstallationOrder(String pkg)
       throws CycleException, PackageNotFoundException {
-
-    // 3.graph DFS
-    // 4.Rgraph DFS
-
     if (!graph.getAllVertices().contains(pkg)) {
       System.out.println(pkg + " not exist");
       throw new PackageNotFoundException();
     }
+    int num = graph.getAllVertices().size();
+    Stack<String> st = new Stack<>();
     Set<String> unvisited = graph.getAllVertices();
-    List<String> DFS = new ArrayList<>();
-    List<String> BFS = new ArrayList<>();
-    Queue<String> q = new LinkedList<>();
-    System.out.println("BFS: " + pkg);
-    unvisited.remove(pkg);// mark pkg as visited
-    q.offer(pkg);// enqueue pkg
-    while (!q.isEmpty()) {
-      String curr = q.poll();// dequeue
-      BFS.add(curr);
-      for (String s : graph.getAdjacentVerticesOf(curr)) {// for each successor of curr
-        if (unvisited.contains(s)) {// if unvisited
-          unvisited.remove(s);
-          q.offer(s);
+    List<String> installOrder = new ArrayList<>();
+    unvisited.remove(pkg);
+    // installOrder.add(pkg);
+    st.push(pkg);
+    while (!st.empty()) {
+      String curr = st.peek();
+      boolean allVisited = true;
+      for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (unvisited.contains(s)) {
+          allVisited = false;
         }
       }
-    }
-    // BFS.remove(0);
-    return BFS;
+      if (allVisited) {
+        st.pop();
+        // System.out.println(curr + " " + num);
+        installOrder.add(0, curr);
+        num--;
+      } else {
+        for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+          if (unvisited.contains(s)) {
+            unvisited.remove(s);
+            st.push(s);
+            break;
+          }
+        }
 
-    // DFS = DFSHelper(pkg, DFS, unvisited);
-    // //DFS.remove(0);
-    // return DFS;
+      }
+    }
+    Collections.reverse(installOrder);
+    // installOrder.remove(0);
+    return installOrder;
   }
 
-  private List<String> DFSHelper(String v, List<String> DFS, Set<String> unvisited)
-      throws CycleException {
-    System.out.println("DFS: " + v);
-    unvisited.remove(v);// mark v as visited
-    DFS.add(v);
-    for (String s : rGraph.getAdjacentVerticesOf(v)) {// for each successors of v
-      if (s.equals(v)) {
-        throw new CycleException();
-      }
-      if (unvisited.contains(s)) {
-        return DFSHelper(s, DFS, unvisited);
-      }
-      return DFS;
-    }
-    return DFS;
-  }
 
 
   /**
@@ -181,14 +176,6 @@ public class PackageManager {
    */
   public List<String> toInstall(String newPkg, String installedPkg)
       throws CycleException, PackageNotFoundException {
-    if (!graph.getAllVertices().contains(newPkg)) {
-      System.out.println(newPkg + " not exist");
-      throw new PackageNotFoundException();
-    }
-    if (!graph.getAllVertices().contains(installedPkg)) {
-      System.out.println(installedPkg + " not exist");
-      throw new PackageNotFoundException();
-    }
     return null;
   }
 
@@ -203,40 +190,7 @@ public class PackageManager {
    * @throws CycleException if you encounter a cycle in the graph
    */
   public List<String> getInstallationOrderForAllPackages() throws CycleException {
-    List<String> seq = new ArrayList<String>();// topological order of all packages
-    Stack<String> st = new Stack<>();
-    int num = graph.order();// num of vertices
-    String curr = null;
-    Set<String> unvisited = graph.getAllVertices();// mark all vertices as visited
-    for (String v : graph.getAllVertices()) {
-      if (!hasPredecessor(v)) {// if v has no predecessor
-        unvisited.remove(v);// mark v as visited
-        st.push(v);// push to stack
-      }
-    }
-    boolean allVisited = true;
-    while (!st.empty()) {// while stack is not empty
-      curr = st.peek();
-      for (String s : successorsOf(curr)) {// if all successors of current
-        if (!unvisited.contains(s)) {// if successor is visited
-          allVisited = false;
-        }
-      }
-      if (allVisited) {
-        st.pop();// pop from stack
-        seq.add(0, curr);// assign num to current vertex
-        num--;
-      } else {
-        for (String u : successorsOf(curr)) {
-          if (unvisited.contains(u)) {
-            unvisited.remove(u);
-            st.push(u);
-            break;
-          }
-        }
-      }
-    }
-    return null;
+    throw new CycleException();
   }
 
   /**
@@ -253,6 +207,7 @@ public class PackageManager {
    * @throws CycleException if you encounter a cycle in the graph
    */
   public String getPackageWithMaxDependencies() throws CycleException {
+
     return "";
   }
 
@@ -291,7 +246,8 @@ public class PackageManager {
     return false;
   }
 
-  // public Graph getGraph() {
-  // return this.graph;
-  // }
+  public Graph getGraph() {
+    return this.graph;
+  }
+
 }
