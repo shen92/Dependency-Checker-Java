@@ -17,11 +17,6 @@ public class test {
     PackageManager test = new PackageManager();
     test.constructGraph("cyclic.json");
     System.out.println("End constructGraph");
-    for (String u : test.getGraph().getAllVertices()) {
-      System.out.println(u + ": " + test.getInstallationOrder(u));
-    }
-    System.out.println("Over");
-    // System.out.println(test.getInstallationOrderForAllPackages());
   }
 
   public static void gTest() {

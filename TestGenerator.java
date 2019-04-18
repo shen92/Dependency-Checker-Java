@@ -10,14 +10,9 @@ public class TestGenerator {
     if (sc.hasNextInt()) {
       start = sc.nextInt();
     }
-    System.out.print("End Num: ");
-    int end = 0;
-    if (sc.hasNextInt()) {
-      end = sc.nextInt();
-    }
     String blank = sc.nextLine();
     blank.length();
-    for (int i = start; i <= end; i++) {
+    for (int i = start; i <= 1000; i++) {
       if (i < 10) {
         System.out.println("Test_00" + i + "_<Name> (input seprated by space)");
       } else {

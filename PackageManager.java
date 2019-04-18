@@ -228,10 +228,8 @@ public class PackageManager {
    * 
    * @return List<String>, order in which all the packages have to be installed
    * @throws CycleException if you encounter a cycle in the graph
-   * @throws PackageNotFoundException
    */
-  public List<String> getInstallationOrderForAllPackages()
-      throws CycleException, PackageNotFoundException {
+  public List<String> getInstallationOrderForAllPackages() throws CycleException {
     checkCycle();
     if (!isDAG) {
       throw new CycleException();
@@ -284,10 +282,14 @@ public class PackageManager {
    * @throws CycleException if you encounter a cycle in the graph
    * @throws PackageNotFoundException
    */
-  public String getPackageWithMaxDependencies() throws CycleException, PackageNotFoundException {
+  public String getPackageWithMaxDependencies() throws CycleException {
     ArrayList<ArrayList<String>> allInstallOrders = new ArrayList<>();
     for (String u : rGraph.getAllVertices()) {
-      allInstallOrders.add((ArrayList<String>) getInstallationOrder(u));
+      try {
+        allInstallOrders.add((ArrayList<String>) getInstallationOrder(u));
+      } catch (PackageNotFoundException e) {
+        System.out.println("Unexcepted Exception Occurred: " + e.getMessage());
+      }
     }
     int num = allInstallOrders.get(0).size();
     String max = allInstallOrders.get(0).get(allInstallOrders.get(0).size() - 1);
@@ -330,7 +332,9 @@ public class PackageManager {
   }
 
   private void DFS(String v, Set<String> unvisited, Set<String> visited) {
+    for (String s : rGraph.getAdjacentVerticesOf(v)) {
 
+    }
   }
 
   public Graph getGraph() {
