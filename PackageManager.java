@@ -139,6 +139,7 @@ public class PackageManager {
    * Valid installation order means that each package is listed before any packages that depend upon
    * that package.
    * 
+   * @param String pkg to install
    * @return List<String>, order in which the packages have to be installed
    * 
    * @throws CycleException if you encounter a cycle in the graph while finding the installation
@@ -196,6 +197,9 @@ public class PackageManager {
    * For example, refer to shared_dependecies.json - toInstall("A","B") If package A needs to be
    * installed and packageB is already installed, return the list ["A", "C"] since D will have been
    * installed when B was previously installed.
+   * 
+   * @param String newPkg to install
+   * @param String installedPkg has installed
    * 
    * @return List<String>, packages that need to be newly installed.
    * 
@@ -298,6 +302,9 @@ public class PackageManager {
         }
       }
     }
+    if (!unvisited.isEmpty()) {
+      throw new CycleException();
+    }
     Collections.reverse(topoOrder);
     return topoOrder;
   }
@@ -336,25 +343,17 @@ public class PackageManager {
     return max;
   }
 
+  /**
+   * Main method of the class
+   * 
+   * @param String[] args
+   */
   public static void main(String[] args) {
     System.out.println("PackageManager.main()");
   }
 
   private boolean hasPredecessor(String vertex) {
     return graph.getAdjacentVerticesOf(vertex).size() > 0;
-  }
-
-  private List<String> predecessorsOf(String vertex) {
-    return graph.getAdjacentVerticesOf(vertex);
-  }
-
-  private boolean hasSuccessor(String vertex) {
-    // System.out.println(graph.getAdjacentVerticesOf(vertex));
-    return rGraph.getAdjacentVerticesOf(vertex).size() > 0;
-  }
-
-  private List<String> successorsOf(String vertex) {
-    return rGraph.getAdjacentVerticesOf(vertex);
   }
 
 }

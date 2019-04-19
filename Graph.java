@@ -144,7 +144,6 @@ public class Graph implements GraphADT {
       if (adjList.get(i).get(0).equals(vertex1)) {// add edge to the sublist
         adjList.get(i).add(vertex2);
         this.size++;
-        debug();
         return;
       }
     }
@@ -264,17 +263,4 @@ public class Graph implements GraphADT {
     return false;
   }
 
-  private void debug() {
-    // System.out.println("========graphView========");
-    // System.out.println("Size: " + this.size);
-    // System.out.println("Order: " + this.order);
-    // for (int i = 0; i < adjList.size(); i++) {
-    // System.out.print(adjList.get(i).get(0) + "->");
-    // for (int j = 1; j < adjList.get(i).size(); j++) {
-    // System.out.print(adjList.get(i).get(j) + ", ");
-    // }
-    // System.out.println();
-    // }
-    // System.out.println();
-  }
 }
