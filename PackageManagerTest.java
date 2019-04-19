@@ -125,9 +125,9 @@ public class PackageManagerTest {
   @Test
   public void test003_get_installation_order_of_pkg_should_check_cycle_exception() {
     try {
-      // TODO
-      // if
+      cycle.getInstallationOrder("B");
       fail("get installation order of pkg should check cycle exception.");
+    } catch (CycleException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 003: " + e.getMessage());
@@ -180,9 +180,8 @@ public class PackageManagerTest {
   @Test
   public void test006_to_install_checks_cycle_exception() {
     try {
-      // TODO
-      // if
-      fail("to install checks cycle exception.");
+      cycle.toInstall("A", "B");
+    } catch (CycleException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 006: " + e.getMessage());
@@ -234,9 +233,9 @@ public class PackageManagerTest {
   @Test
   public void test009_get_installation_order_for_all_packages_checks_cycle_exception() {
     try {
-      // TODO
-      // if
-      fail("get installation order for all packages checks cycle exception.");
+      cycle.getInstallationOrderForAllPackages();
+      fail("get installation order for all packages should check cycle exception.");
+    } catch (CycleException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 009: " + e.getMessage());
@@ -276,9 +275,9 @@ public class PackageManagerTest {
   @Test
   public void test011_get_package_with_max_dependencies_checks_cycle_exception() {
     try {
-      // TODO
-      // if
+      cycle.getPackageWithMaxDependencies();
       fail("get package with max dependencies checks cycle exception.");
+    } catch (CycleException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 011: " + e.getMessage());

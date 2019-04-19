@@ -32,15 +32,12 @@ public class PackageManager {
   private Graph graph;
   private Graph rGraph;
 
-  private boolean isDAG;
-
   /*
    * Package Manager default no-argument constructor.
    */
   public PackageManager() {
     this.graph = new Graph();
     this.rGraph = new Graph();
-    this.isDAG = true;
   }
 
   /**
@@ -117,34 +114,36 @@ public class PackageManager {
    */
   public List<String> getInstallationOrder(String pkg)
       throws CycleException, PackageNotFoundException {
-    if (!isDAG) {
-      throw new CycleException();
-    }
     if (!graph.getAllVertices().contains(pkg)) {
-      System.out.println(pkg + " not exist");
       throw new PackageNotFoundException();
     }
     Stack<String> st = new Stack<>();
+    // mark all vertices as unvisited
     Set<String> unvisited = graph.getAllVertices();
     List<String> installOrder = new ArrayList<>();
-    unvisited.remove(pkg);
-    st.push(pkg);
-    while (!st.empty()) {
+    unvisited.remove(pkg);// mark all vertices as unvisited
+    st.push(pkg);// push to stack
+    while (!st.empty()) {// while stack is not empty
       String curr = st.peek();
       boolean allVisited = true;
       for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (st.contains(s)) {
+          throw new CycleException();
+        }
         if (unvisited.contains(s)) {
           allVisited = false;
         }
       }
+      // if all successors of current are visited
       if (allVisited) {
-        st.pop();
-        installOrder.add(0, curr);
+        st.pop();// pop from stack
+        installOrder.add(0, curr);// assign number to it
       } else {
+        // select unvisited successor s from curr
         for (String s : rGraph.getAdjacentVerticesOf(curr)) {
           if (unvisited.contains(s)) {
-            unvisited.remove(s);
-            st.push(s);
+            unvisited.remove(s);// mark s as visited
+            st.push(s);// push s to stack
             break;
           }
         }
@@ -173,11 +172,7 @@ public class PackageManager {
    */
   public List<String> toInstall(String newPkg, String installedPkg)
       throws CycleException, PackageNotFoundException {
-    if (!isDAG) {
-      throw new CycleException();
-    }
     if (!graph.getAllVertices().contains(newPkg)) {
-      System.out.println(newPkg + " not exist");
       throw new PackageNotFoundException();
     }
     if (!graph.getAllVertices().contains(installedPkg)) {
@@ -185,27 +180,32 @@ public class PackageManager {
       throw new PackageNotFoundException();
     }
     Stack<String> st = new Stack<>();
-    Set<String> unvisited = graph.getAllVertices();
+    Set<String> unvisited = graph.getAllVertices();// mark all vertices as unvisited
     List<String> installOrder = new ArrayList<>();
-    unvisited.remove(newPkg);
-    unvisited.remove(installedPkg);
-    st.push(newPkg);
+    unvisited.remove(newPkg);// mark newPkg as visited
+    unvisited.remove(installedPkg);// mark installPkg as visited
+    st.push(newPkg);// push to stack
     while (!st.empty()) {
       String curr = st.peek();
       boolean allVisited = true;
       for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (st.contains(s)) {
+          throw new CycleException();
+        }
         if (unvisited.contains(s)) {
           allVisited = false;
         }
       }
+      // if all successors of current are visited
       if (allVisited) {
-        st.pop();
-        installOrder.add(0, curr);
+        st.pop();// pop from stack
+        installOrder.add(0, curr);// assign num to it
       } else {
+        // select unvisited successor s of curr
         for (String s : rGraph.getAdjacentVerticesOf(curr)) {
           if (unvisited.contains(s)) {
-            unvisited.remove(s);
-            st.push(s);
+            unvisited.remove(s);// mark s as visited
+            st.push(s);// push v to stack
             break;
           }
         }
@@ -226,34 +226,37 @@ public class PackageManager {
    * @throws CycleException if you encounter a cycle in the graph
    */
   public List<String> getInstallationOrderForAllPackages() throws CycleException {
-    if (!isDAG) {
-      throw new CycleException();
-    }
     Stack<String> st = new Stack<>();
-    Set<String> unvisited = graph.getAllVertices();
+    Set<String> unvisited = graph.getAllVertices();// mark all vertices as visited
     List<String> topoOrder = new ArrayList<>();
+    // for each vertex with no predecessors
     for (String v : rGraph.getAllVertices()) {
       if (!hasPredecessor(v)) {
-        unvisited.remove(v);
-        st.push(v);
+        unvisited.remove(v);// mark v as visited
+        st.push(v);// push to stack
       }
     }
-    while (!st.empty()) {
+    while (!st.empty()) {// while stack is not empty
       String curr = st.peek();
       boolean allVisited = true;
       for (String s : rGraph.getAdjacentVerticesOf(curr)) {
+        if (st.contains(s)) {
+          throw new CycleException();
+        }
         if (unvisited.contains(s)) {
           allVisited = false;
         }
       }
+      // if all successors of current are visited
       if (allVisited) {
-        st.pop();
-        topoOrder.add(0, curr);
+        st.pop();// pop from stack
+        topoOrder.add(0, curr);// assign num to it
       } else {
+        // select unvisited successor s of curr
         for (String s : rGraph.getAdjacentVerticesOf(curr)) {
           if (unvisited.contains(s)) {
-            unvisited.remove(s);
-            st.push(s);
+            unvisited.remove(s);// mark s as visited
+            st.push(s);// push s to stack
             break;
           }
         }
@@ -280,6 +283,7 @@ public class PackageManager {
     ArrayList<ArrayList<String>> allInstallOrders = new ArrayList<>();
     for (String u : rGraph.getAllVertices()) {
       try {
+        // get install order for all vertices
         allInstallOrders.add((ArrayList<String>) getInstallationOrder(u));
       } catch (PackageNotFoundException e) {
         System.out.println("Unexcepted Exception Occurred: " + e.getMessage());
@@ -287,6 +291,7 @@ public class PackageManager {
     }
     int num = allInstallOrders.get(0).size();
     String max = allInstallOrders.get(0).get(allInstallOrders.get(0).size() - 1);
+    // iterate through the ArrayList for max dependenices
     for (int i = 0; i < allInstallOrders.size(); i++) {
       if (allInstallOrders.get(i).size() > num) {
         max = allInstallOrders.get(i).get(allInstallOrders.get(i).size() - 1);
@@ -314,10 +319,6 @@ public class PackageManager {
 
   private List<String> successorsOf(String vertex) {
     return rGraph.getAdjacentVerticesOf(vertex);
-  }
-
-  public Graph getGraph() {
-    return this.graph;
   }
 
 }
