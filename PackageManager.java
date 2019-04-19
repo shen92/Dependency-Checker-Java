@@ -88,7 +88,7 @@ public class PackageManager {
         rGraph.addEdge(pack.getName(), pack.getDependencies()[j]);
       }
     }
-    checkCycle();
+    // checkCycle();
   }
 
   /**
@@ -117,7 +117,6 @@ public class PackageManager {
    */
   public List<String> getInstallationOrder(String pkg)
       throws CycleException, PackageNotFoundException {
-    checkCycle();
     if (!isDAG) {
       throw new CycleException();
     }
@@ -175,7 +174,6 @@ public class PackageManager {
    */
   public List<String> toInstall(String newPkg, String installedPkg)
       throws CycleException, PackageNotFoundException {
-    checkCycle();
     if (!isDAG) {
       throw new CycleException();
     }
@@ -229,7 +227,6 @@ public class PackageManager {
    * @throws CycleException if you encounter a cycle in the graph
    */
   public List<String> getInstallationOrderForAllPackages() throws CycleException {
-    checkCycle();
     if (!isDAG) {
       throw new CycleException();
     }
@@ -319,33 +316,6 @@ public class PackageManager {
 
   private List<String> successorsOf(String vertex) {
     return rGraph.getAdjacentVerticesOf(vertex);
-  }
-
-  private void checkCycle() {
-    System.out.println("check");
-    Set<String> unvisited = rGraph.getAllVertices();
-    Set<String> visited = new HashSet<>();
-    Set<String> INP = new HashSet<>();
-    for (String u : rGraph.getAllVertices()) {
-      DFS(u, unvisited, visited, INP);
-    }
-    System.out.println("DAG: " + this.isDAG);
-  }
-
-  private void DFS(String v, Set<String> unvisited, Set<String> visited, Set<String> INP) {
-    // mark v as visited
-    unvisited.remove(v);
-    visited.add(v);
-    if (visited.contains(v) && !INP.contains(v)) {
-      this.isDAG = false;
-    }
-    for (String s : rGraph.getAdjacentVerticesOf(v)) {
-      INP.addAll(rGraph.getAdjacentVerticesOf(v));
-      if (unvisited.contains(s)) {// for each unvisited successors of s
-        DFS(s, unvisited, visited, INP);
-        INP.remove(s);
-      }
-    }
   }
 
   public Graph getGraph() {

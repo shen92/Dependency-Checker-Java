@@ -15,7 +15,7 @@ public class test {
   public static void mTest() throws FileNotFoundException, IOException, ParseException,
       CycleException, PackageNotFoundException {
     PackageManager test = new PackageManager();
-    test.constructGraph("cyclic.json");
+    test.constructGraph("debug1.json");
     System.out.println("End constructGraph");
     System.out.println(test.getInstallationOrderForAllPackages());
   }

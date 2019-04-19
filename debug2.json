@@ -2,20 +2,25 @@
 	"packages": [
 		{
 			"name": "1",
-			"dependencies": [
-				"3"
-			]
+			"dependencies": []
 		},
 		{
 			"name": "2",
 			"dependencies": [
-				"1"
+				"1",
+				"4"
 			]
 		},
 		{
 			"name": "3",
 			"dependencies": [
 				"2"
+			]
+		},
+		{
+			"name": "4",
+			"dependencies": [
+				"3"
 			]
 		}
 	]

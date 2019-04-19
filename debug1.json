@@ -1,10 +1,7 @@
 {
 	"packages": [
 		{
-			"name": "1",
-			"dependencies": [
-				"3"
-			]
+			
 		},
 		{
 			"name": "2",
@@ -15,6 +12,7 @@
 		{
 			"name": "3",
 			"dependencies": [
+				"1",
 				"2"
 			]
 		}
