@@ -84,12 +84,11 @@ public class PackageManager {
 
       for (int j = 0; j < packageDependencies.length; j++) {
         // add edges point to the vertex
-        System.out.println("graph:");
         graph.addEdge(pack.getDependencies()[j], pack.getName());
-        System.out.println("rGraph:");
         rGraph.addEdge(pack.getName(), pack.getDependencies()[j]);
       }
     }
+    checkCycle();
   }
 
   /**
@@ -326,14 +325,26 @@ public class PackageManager {
     System.out.println("check");
     Set<String> unvisited = rGraph.getAllVertices();
     Set<String> visited = new HashSet<>();
+    Set<String> INP = new HashSet<>();
     for (String u : rGraph.getAllVertices()) {
-      DFS(u, unvisited, visited);
+      DFS(u, unvisited, visited, INP);
     }
+    System.out.println("DAG: " + this.isDAG);
   }
 
-  private void DFS(String v, Set<String> unvisited, Set<String> visited) {
+  private void DFS(String v, Set<String> unvisited, Set<String> visited, Set<String> INP) {
+    // mark v as visited
+    unvisited.remove(v);
+    visited.add(v);
+    if (visited.contains(v) && !INP.contains(v)) {
+      this.isDAG = false;
+    }
     for (String s : rGraph.getAdjacentVerticesOf(v)) {
-
+      INP.addAll(rGraph.getAdjacentVerticesOf(v));
+      if (unvisited.contains(s)) {// for each unvisited successors of s
+        DFS(s, unvisited, visited, INP);
+        INP.remove(s);
+      }
     }
   }
 
