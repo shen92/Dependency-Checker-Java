@@ -47,7 +47,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * This test test the HashTable class
+ * This test test the PackageManager class
  * 
  * @author Yingjie Shen, Dongxia Wu
  */

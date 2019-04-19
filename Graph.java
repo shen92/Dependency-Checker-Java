@@ -39,7 +39,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Filename: Graph.java Project: p4 Authors: Yingjie Shen, Dongxia Wu
+ * Filename: Graph.java 
+ * Project: p4 
+ * 
+ * Authors: Yingjie Shen, Dongxia Wu
  * 
  * Directed and unweighted graph implementation
  */
@@ -67,6 +70,9 @@ public class Graph implements GraphADT {
    * exception.
    * 
    * Valid argument conditions: 1. vertex is non-null 2. vertex is not already in the graph
+   * 
+   * @param String vertex
+   * 
    */
   public void addVertex(String vertex) {
     if (vertex == null) {// check if vertex is null or exist
@@ -88,6 +94,8 @@ public class Graph implements GraphADT {
    * an exception.
    * 
    * Valid argument conditions: 1. vertex is non-null 2. vertex is not already in the graph
+   * 
+   * @param String vertex
    */
   public void removeVertex(String vertex) {
     System.out.println("remove " + vertex);
@@ -122,6 +130,9 @@ public class Graph implements GraphADT {
    * edge exists in the graph, no edge is added and no exception is thrown.
    * 
    * Valid argument conditions: 1. neither vertex is null 2. the edge is not in the graph
+   * 
+   * @param String vertex1
+   * @param String vertex2
    */
   public void addEdge(String vertex1, String vertex2) {
     // check if neither vertex is null and the edge is not in the graph
@@ -158,6 +169,9 @@ public class Graph implements GraphADT {
    * 
    * Valid argument conditions: 1. neither vertex is null 2. both vertices are in the graph 3. the
    * edge from vertex1 to vertex2 is in the graph
+   * 
+   * @param String vertex1
+   * @param String vertex2
    */
   public void removeEdge(String vertex1, String vertex2) {
     // check if neither vertex is null, both vertices are in the graph or the edge from vertex1 to
@@ -193,6 +207,7 @@ public class Graph implements GraphADT {
   /**
    * Returns a Set that contains all the vertices
    * 
+   * @return Set<String> that contains all the vertices
    */
   public Set<String> getAllVertices() {
     Set<String> allVertices = new HashSet<String>();
@@ -204,7 +219,9 @@ public class Graph implements GraphADT {
 
   /**
    * Get all the neighbor (adjacent) vertices of a vertex
-   *
+   * 
+   * @param String vertex
+   * @return List<String> all the neighbor (adjacent) vertices of a vertex
    */
   public List<String> getAdjacentVerticesOf(String vertex) {
     if (!containsV(vertex)) {
@@ -223,6 +240,8 @@ public class Graph implements GraphADT {
 
   /**
    * Returns the number of edges in this graph.
+   * 
+   * @return int number of edges in this graph
    */
   public int size() {
     return this.size;
@@ -230,6 +249,8 @@ public class Graph implements GraphADT {
 
   /**
    * Returns the number of vertices in this graph.
+   * 
+   * @return int number of vertices in this graph
    */
   public int order() {
     return this.order;
@@ -237,6 +258,9 @@ public class Graph implements GraphADT {
 
   /**
    * This method checks if vertex is in the graph
+   * 
+   * @param String vertex
+   * @return boolean true if vertex is in the graph
    */
   private boolean containsV(String vertex) {
     for (int i = 0; i < this.adjList.size(); i++) {// get the vertex
@@ -249,6 +273,10 @@ public class Graph implements GraphADT {
 
   /**
    * This method checks if there exists an edge from vertex1 to vertex2
+   * 
+   * @param String vertex1
+   * @param String vertex2
+   * @return if there exists an edge from vertex1 to vertex2
    */
   private boolean contiansE(String vertex1, String vertex2) {
     for (int i = 0; i < adjList.size(); i++) {

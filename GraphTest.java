@@ -44,9 +44,9 @@ import java.util.Random;
 import java.util.*;
 
 /**
- * This test test the HashTable class
+ * This test test the Graph class
  * 
- * @author Yingjie Shen
+ * @author Yingjie Shen, Dongxia Wu
  */
 public class GraphTest {
 

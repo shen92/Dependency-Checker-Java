@@ -44,7 +44,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * Filename: PackageManager.java Project: p4 Authors:
+ * Filename: PackageManager.java
+ * Project: p4 
+ *  
+ * Authors: Yingjie Shen, Dongxia Wu
  * 
  * PackageManager is used to process json package dependency files and provide function that make
  * that information available to other users.
@@ -352,6 +355,13 @@ public class PackageManager {
     System.out.println("PackageManager.main()");
   }
 
+  /**
+   * This method checks is a vertex has a predecessor
+   * 
+   * @param String vertex to check
+   * 
+   * @return boolean if a vertex has a predecessor
+   */
   private boolean hasPredecessor(String vertex) {
     return graph.getAdjacentVerticesOf(vertex).size() > 0;
   }
