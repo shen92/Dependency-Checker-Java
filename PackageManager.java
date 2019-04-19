@@ -148,7 +148,6 @@ public class PackageManager {
             break;
           }
         }
-
       }
     }
     Collections.reverse(installOrder);
@@ -276,7 +275,6 @@ public class PackageManager {
    * 
    * @return String, name of the package with most dependencies.
    * @throws CycleException if you encounter a cycle in the graph
-   * @throws PackageNotFoundException
    */
   public String getPackageWithMaxDependencies() throws CycleException {
     ArrayList<ArrayList<String>> allInstallOrders = new ArrayList<>();

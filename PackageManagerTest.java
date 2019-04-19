@@ -82,9 +82,10 @@ public class PackageManagerTest {
   @Test
   public void test001_invalid_json_file_should_throw_exception() {
     try {
-      // TODO
-      // if
+      inValidJSON.constructGraph("invalid.json");
       fail("invalid json file should throw exception.");
+    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 001: " + e.getMessage());
@@ -97,9 +98,21 @@ public class PackageManagerTest {
   @Test
   public void test002_get_all_packages_return_correct_packages() {
     try {
-      // TODO
-      // if
-      fail("get all packages return correct packages.");
+      ArrayList<String> expect = new ArrayList<>();
+      expect.add("C");
+      expect.add("D");
+      expect.add("B");
+      expect.add("E");
+      expect.add("A");
+      List<String> output = valid.getInstallationOrderForAllPackages();
+      if (expect.size() != output.size()) {
+        fail("get all packages should return correct packages.");
+      }
+      for (int i = 0; i < expect.size(); i++) {
+        if (!expect.get(i).equals(output.get(i))) {
+          fail("get all packages should return correct packages.");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 002: " + e.getMessage());
@@ -127,9 +140,9 @@ public class PackageManagerTest {
   @Test
   public void test004_get_installation_order_of_pkg_should_check_if_pkg_exists() {
     try {
-      // TODO
-      // if
+      valid.getInstallationOrder("1");
       fail("get installation order of pkg should check if pkg exists.");
+    } catch (PackageNotFoundException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 004: " + e.getMessage());
@@ -142,9 +155,19 @@ public class PackageManagerTest {
   @Test
   public void test005_get_installation_order_of_pkg_return_correct_order() {
     try {
-      // TODO
-      // if
-      fail("get installation order of pkg return correct order.");
+      List<String> expect = new ArrayList<>();
+      expect.add("C");
+      expect.add("D");
+      expect.add("B");
+      List<String> output = valid.getInstallationOrder("B");
+      if (expect.size() != output.size()) {
+        fail("get installation order of pkg return correct order.");
+      }
+      for (int i = 0; i < expect.size(); i++) {
+        if (!expect.get(i).equals(output.get(i))) {
+          fail("get installation order of pkg return correct order.");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 005: " + e.getMessage());
@@ -172,9 +195,9 @@ public class PackageManagerTest {
   @Test
   public void test007_to_install_checks_package_not_found_exception() {
     try {
-      // TODO
-      // if
-      fail("to install checks package not found exception.");
+      valid.toInstall("1", "A");
+      fail("to install should check if pkg exists.");
+    } catch (PackageNotFoundException e) {
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 007: " + e.getMessage());
@@ -187,9 +210,18 @@ public class PackageManagerTest {
   @Test
   public void test008_to_install_returns_correct_install_order() {
     try {
-      // TODO
-      // if
-      fail("to install returns correct install order.");
+      List<String> expect = new ArrayList<>();
+      expect.add("D");
+      expect.add("B");
+      List<String> output = valid.toInstall("B", "C");
+      if (expect.size() != output.size()) {
+        fail("to install returns correct install order.");
+      }
+      for (int i = 0; i < expect.size(); i++) {
+        if (!expect.get(i).equals(output.get(i))) {
+          fail("to install returns correct install order.");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 008: " + e.getMessage());
@@ -217,9 +249,21 @@ public class PackageManagerTest {
   @Test
   public void test010_get_installation_order_for_all_packages_returns_correct_order() {
     try {
-      // TODO
-      // if
-      fail("get installation order for all packages returns correct order.");
+      List<String> expect = new ArrayList<>();
+      expect.add("C");
+      expect.add("D");
+      expect.add("B");
+      expect.add("E");
+      expect.add("A");
+      List<String> output = valid.getInstallationOrderForAllPackages();
+      if (expect.size() != output.size()) {
+        fail("get installation order for all packages returns correct order.");
+      }
+      for (int i = 0; i < expect.size(); i++) {
+        if (!expect.get(i).equals(output.get(i))) {
+          fail("get installation order for all packages returns correct order.");
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 010: " + e.getMessage());
@@ -247,9 +291,11 @@ public class PackageManagerTest {
   @Test
   public void test012_get_package_with_max_dependencies_returns_the_correct_package_name() {
     try {
-      // TODO
-      // if
-      fail("get package with max dependencies returns the correct package name.");
+      String expect = "A";
+      String output = valid.getPackageWithMaxDependencies();
+      if (!expect.equals(output)) {
+        fail("get package with max dependencies returns the correct package name.");
+      }
     } catch (Exception e) {
       e.printStackTrace();
       fail("Unexpected exception 012: " + e.getMessage());
