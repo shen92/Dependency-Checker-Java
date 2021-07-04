@@ -98,7 +98,6 @@ public class Graph implements GraphADT {
    * @param String vertex
    */
   public void removeVertex(String vertex) {
-    System.out.println("remove " + vertex);
     if (vertex == null) {// check if vertex is null or exist
       return;
     }
@@ -108,7 +107,6 @@ public class Graph implements GraphADT {
     for (int i = 0; i < adjList.size(); i++) {// remove the vertices point to vertex
       for (int j = adjList.get(i).size() - 1; j > 0; j--) {
         if (adjList.get(i).get(j).equals(vertex)) {
-          System.out.println("remove " + vertex + " from " + adjList.get(i).get(0));
           adjList.get(i).remove(j);
           this.size--;
         }

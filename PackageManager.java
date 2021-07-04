@@ -219,7 +219,6 @@ public class PackageManager {
       throw new PackageNotFoundException();
     }
     if (!graph.getAllVertices().contains(installedPkg)) {
-      System.out.println(installedPkg + " not exist");
       throw new PackageNotFoundException();
     }
     Stack<String> st = new Stack<>();
